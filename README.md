@@ -42,14 +42,6 @@ zinit light zsh-users/zsh-history-substring-search
 zinit light sindresorhus/pure
 zinit light zdharma-continuum/fast-syntax-highlighting
 
-# function zvm_after_init() {
-bindkey '^k' history-substring-search-up
-bindkey '^j' history-substring-search-down
-
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
-# }
-
 # sudo 按键绑定 ------------------------------------------------------
 bindkey -M emacs '^f' sudo-command-line
 bindkey -M vicmd '^f' sudo-command-line
@@ -59,6 +51,14 @@ bindkey -M viins '^f' sudo-command-line
 bindkey -M vicmd 'H' vi-first-non-blank
 bindkey -M vicmd 'L' vi-end-of-line
 bindkey -M viins '^\\' vi-cmd-mode
+
+# function zvm_after_init() {
+bindkey '^k' history-substring-search-up
+bindkey '^j' history-substring-search-down
+
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+# }
 
 # zsh-history-substring-search 取消高亮
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND=''
