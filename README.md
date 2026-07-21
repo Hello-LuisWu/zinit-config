@@ -12,6 +12,45 @@ bash -c "$(curl --fail --show-error --silent --location https://raw.githubuserco
 
 ```sh
 
+# 检查有没有安装 fastfetch
+if ! command -v fastfetch &>/dev/null; then
+    echo "fastfetch 未安装，正在安装..."
+
+    # 判断操作系统
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS 安装 fastfetch
+        if command -v brew &>/dev/null; then
+            brew install fastfetch
+        else
+            echo "未检测到 Homebrew，请先安装 Homebrew: https://brew.sh/"
+            exit 1
+        fi
+    elif [[ -f /etc/os-release ]]; then
+        # 读取 Linux 发行版信息
+        . /etc/os-release
+        case "$ID" in
+            ubuntu|debian)
+                 sudo add-apt-repository ppa:zhangsongcui3371/fastfetch && sudo apt update && sudo apt install -y fastfetch
+                ;;
+            arch|manjaro)
+                sudo pacman -Sy fastfetch
+                ;;
+            fedora)
+                sudo dnf install -y fastfetch
+                ;;
+            *)
+              #   echo "未知 Linux 发行版 ($ID)，使用 Git 方式安装 fzf..."
+              #   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+              #   ~/.fzf/install
+              #   ;;
+        esac
+    else
+        echo "无法检测操作系统类型，请手动安装 fastfetch: https://github.com/fastfetch-cli/fastfetch"
+        exit 1
+    fi
+fi
+
+
 # 启动shell 检查有没有安装fzf
 if ! command -v fzf &>/dev/null; then
     echo "fzf 未安装，正在安装..."
