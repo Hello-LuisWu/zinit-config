@@ -36,7 +36,7 @@ zinit light Aloxaf/fzf-tab
 zinit light Freed-Wu/fzf-tab-source
 zinit light zsh-users/zsh-autosuggestions
 zinit snippet OMZP::sudo
-zinit snippet https://raw.giteeusercontent.com/hello-luiswu/zsh-config/raw/master/.zshconf/config/vimode.zsh
+zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zsh-config/refs/heads/main/.zshconf/config/vimode.zsh
 zinit light hlissner/zsh-autopair
 zinit light zsh-users/zsh-history-substring-search
 zinit light sindresorhus/pure
@@ -50,11 +50,15 @@ bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 # }
 
+# sudo 按键绑定 ------------------------------------------------------
+bindkey -M emacs '^f' sudo-command-line
+bindkey -M vicmd '^f' sudo-command-line
+bindkey -M viins '^f' sudo-command-line
+
 # vi mode 按键绑定 ------------------------------------------------------
 bindkey -M vicmd 'H' vi-first-non-blank
 bindkey -M vicmd 'L' vi-end-of-line
 bindkey -M viins '^\\' vi-cmd-mode
-
 
 # zsh-history-substring-search 取消高亮
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND=''
