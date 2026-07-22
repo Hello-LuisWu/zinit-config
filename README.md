@@ -3,7 +3,7 @@
 ## install zinit
 
 ```sh
-bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/Hello-LuisWu/zinit-config/refs/heads/main/install.sh)"
 ```
 
 ## install plugins
