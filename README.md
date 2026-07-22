@@ -232,68 +232,49 @@ if ! command -v fzf &>/dev/null; then
     fi
 fi
 
+# 检查 starship 是否安装
+if ! command -v starship &>/dev/null; then
+    echo "starship 未安装，正在安装..."
 
-# =====================================================
-# Starship 安装与配置
-# =====================================================
-
-install_starship() {
-
-    # 检查 starship 是否安装
-    if ! command -v starship &>/dev/null; then
-
-        echo "starship 未安装，正在安装..."
-
-        curl -sS https://starship.rs/install.sh | sh
-
-        # 安装失败检测
-        if ! command -v starship &>/dev/null; then
-            echo "❌ starship 安装失败"
-            return 1
+    # 判断操作系统
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS 安装 starship
+        if command -v brew &>/dev/null; then
+            brew install starship
+        else
+            echo "未检测到 Homebrew，请先安装 Homebrew: https://brew.sh/"
+            exit 1
         fi
-
-        echo "✅ starship 安装成功"
-
+    elif [[ -f /etc/os-release ]]; then
+        # 读取 Linux 发行版信息
+        . /etc/os-release
+        case "$ID" in
+            ubuntu|debian)
+                sudo apt update && sudo apt install -y starship
+                ;;
+            arch|manjaro)
+                sudo pacman -Sy --noconfirm starship
+                ;;
+            fedora)
+                sudo dnf install -y starship
+                ;;
+            *)
+                echo "未知 Linux 发行版 ($ID)，尝试使用官方安装方式..."
+                curl -sS https://starship.rs/install.sh | sh
+                ;;
+        esac
     else
-
-        echo "✅ starship 已安装: $(starship --version | head -n1)"
-
+        echo "无法检测操作系统类型，请手动安装 starship: https://starship.rs/"
+        exit 1
     fi
+fi
+# 判断 ~/.config/starship.toml 是否存在
+if [[ ! -f ~/.config/starship.toml ]]; then
+    starship preset pastel-powerline -o ~/.config/starship.toml
+fi
 
 
-    # 初始化 zsh
-    eval "$(starship init zsh)"
-
-
-    # 检查配置文件
-    STARSHIP_CONFIG="$HOME/.config/starship.toml"
-
-
-    if [[ ! -f "$STARSHIP_CONFIG" ]]; then
-
-        echo "未找到 starship 配置，正在生成..."
-
-        mkdir -p "$HOME/.config"
-
-        starship preset pastel-powerline \
-            -o "$STARSHIP_CONFIG"
-
-
-        echo "✅ 已生成配置:"
-        echo "$STARSHIP_CONFIG"
-
-    else
-
-        echo "✅ 已存在配置:"
-        echo "$STARSHIP_CONFIG"
-
-    fi
-}
-
-
-install_starship
-
-eval "$(starship init zsh)" # starship
+eval "$(starship init zsh)"
 
 
 # =========================================================
