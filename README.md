@@ -11,6 +11,144 @@ bash -c "$(curl --fail --show-error --silent --location https://raw.githubuserco
 用 `vim ~/.zshrc` 命令将以下代码复制到 `.zshrc` 文件里
 
 ```sh
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+### End of Zinit's installer chunk
+
+
+# =====================================================
+# 检查并安装 eza
+# =====================================================
+
+if ! command -v eza &>/dev/null; then
+
+    echo "eza 未安装，正在安装..."
+
+    # 判断操作系统
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+
+        # macOS
+        if command -v brew &>/dev/null; then
+            brew install eza
+        else
+            echo "未检测到 Homebrew，请先安装 Homebrew"
+            exit 1
+        fi
+
+
+    elif [[ -f /etc/os-release ]]; then
+
+        # Linux
+        . /etc/os-release
+
+        case "$ID" in
+
+            ubuntu|debian)
+
+                echo "正在安装 Debian/Ubuntu eza..."
+
+                sudo apt update
+                sudo apt install -y gpg wget
+
+                sudo mkdir -p /etc/apt/keyrings
+
+                wget -qO- \
+                https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
+                | sudo gpg --dearmor \
+                -o /etc/apt/keyrings/gierens.gpg
+
+
+                echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
+                | sudo tee /etc/apt/sources.list.d/gierens.list >/dev/null
+
+
+                sudo chmod 644 \
+                /etc/apt/keyrings/gierens.gpg \
+                /etc/apt/sources.list.d/gierens.list
+
+
+                sudo apt update
+                sudo apt install -y eza
+
+                ;;
+
+
+            arch|manjaro)
+
+                echo "正在安装 Arch eza..."
+
+                sudo pacman -Sy --noconfirm eza
+
+                ;;
+
+
+            fedora|rocky|rhel|centos)
+
+                echo "正在安装 RHEL 系 eza..."
+
+                if ! sudo dnf install -y eza; then
+        
+                    echo "使用 cargo 安装 eza"
+        
+                    sudo dnf install -y cargo
+        
+                    cargo install eza
+        
+                    export PATH="$HOME/.cargo/bin:$PATH"
+        
+                fi
+
+
+                ;;
+
+            *)
+
+                echo "未知 Linux 发行版: $ID"
+                echo "请手动安装 eza: https://github.com/eza-community/eza/blob/main/INSTALL.md"
+                exit 1
+
+                ;;
+
+        esac
+
+
+    else
+
+        echo "无法检测系统类型，请手动安装 eza"
+        exit 1
+
+    fi
+
+
+fi
+
+
+# =====================================================
+# eza 版本检测
+# =====================================================
+
+if command -v eza &>/dev/null; then
+
+    EZA_VERSION=$(eza --version | head -n 1)
+
+    echo "✅ eza 安装成功"
+    echo "版本: $EZA_VERSION"
+
+else
+
+    echo "❌ eza 安装失败，请手动安装"
+
+fi
 
 # 检查有没有安装 fastfetch
 if ! command -v fastfetch &>/dev/null; then
@@ -30,7 +168,9 @@ if ! command -v fastfetch &>/dev/null; then
         . /etc/os-release
         case "$ID" in
             ubuntu|debian)
-                 sudo add-apt-repository ppa:zhangsongcui3371/fastfetch && sudo apt update && sudo apt install -y fastfetch
+                sudo add-apt-repository ppa:zhangsongcui3371/fastfetch
+                sudo apt update
+                sudo apt install -y fastfetch
                 ;;
             arch|manjaro)
                 sudo pacman -Sy fastfetch
@@ -39,15 +179,34 @@ if ! command -v fastfetch &>/dev/null; then
                 sudo dnf install -y fastfetch
                 ;;
             *)
-              #   echo "未知 Linux 发行版 ($ID)，使用 Git 方式安装 fzf..."
-              #   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-              #   ~/.fzf/install
-              #   ;;
+                echo "未知 Linux 发行版 ($ID)"
+                echo "请手动安装 fastfetch:"
+                echo "https://github.com/fastfetch-cli/fastfetch"
+                exit 1
+                ;;
         esac
     else
-        echo "无法检测操作系统类型，请手动安装 fastfetch: https://github.com/fastfetch-cli/fastfetch"
+        echo "无法检测操作系统类型，请手动安装 fastfetch"
         exit 1
     fi
+fi
+
+
+# =====================================================
+# fastfetch 版本检测
+# =====================================================
+
+if command -v fastfetch &>/dev/null; then
+
+    EZA_VERSION=$(fastfetch --version | head -n 1)
+
+    echo "✅ fastfetch 安装成功"
+    echo "版本: $EZA_VERSION"
+
+else
+
+    echo "❌ fastfetch 安装失败，请手动安装"
+
 fi
 
 
@@ -74,7 +233,7 @@ if ! command -v fzf &>/dev/null; then
             arch|manjaro)
                 sudo pacman -Sy --noconfirm fzf
                 ;;
-            fedora)
+            fedora|rocky|rhel|centos)
                 sudo dnf install -y fzf
                 ;;
             *)
@@ -89,47 +248,80 @@ if ! command -v fzf &>/dev/null; then
     fi
 fi
 
+if command -v fzd &>/dev/null; then
 
-# 检查 starship 是否安装
-if ! command -v starship &>/dev/null; then
-    echo "starship 未安装，正在安装..."
+    FZF_VERSION=$(fzf --version | head -n 1)
 
-    # 判断操作系统
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS 安装 starship
-        if command -v brew &>/dev/null; then
-            brew install starship
-        else
-            echo "未检测到 Homebrew，请先安装 Homebrew: https://brew.sh/"
-            exit 1
+    echo "✅ fzf 安装成功"
+    echo "版本: $FZF_VERSION"
+
+else
+
+    echo "❌ fzf 安装失败，请手动安装"
+
+fi
+
+# =====================================================
+# Starship 安装与配置
+# =====================================================
+
+install_starship() {
+
+    # 检查 starship 是否安装
+    if ! command -v starship &>/dev/null; then
+
+        echo "starship 未安装，正在安装..."
+
+        curl -sS https://starship.rs/install.sh | sh
+
+        # 安装失败检测
+        if ! command -v starship &>/dev/null; then
+            echo "❌ starship 安装失败"
+            return 1
         fi
-    elif [[ -f /etc/os-release ]]; then
-        # 读取 Linux 发行版信息
-        . /etc/os-release
-        case "$ID" in
-            ubuntu|debian)
-                sudo apt update && sudo apt install -y starship
-                ;;
-            arch|manjaro)
-                sudo pacman -Sy --noconfirm starship
-                ;;
-            fedora)
-                sudo dnf install -y starship
-                ;;
-            *)
-                echo "未知 Linux 发行版 ($ID)，尝试使用官方安装方式..."
-                curl -sS https://starship.rs/install.sh | sh
-                ;;
-        esac
+
+        echo "✅ starship 安装成功"
+
     else
-        echo "无法检测操作系统类型，请手动安装 starship: https://starship.rs/"
-        exit 1
+
+        echo "✅ starship 已安装: $(starship --version | head -n1)"
+
     fi
-fi
-# 判断 ~/.config/starship.toml 是否存在
-if [[ ! -f ~/.config/starship.toml ]]; then
-    starship preset pastel-powerline -o ~/.config/starship.toml
-fi
+
+
+    # 初始化 zsh
+    eval "$(starship init zsh)"
+
+
+    # 检查配置文件
+    STARSHIP_CONFIG="$HOME/.config/starship.toml"
+
+
+    if [[ ! -f "$STARSHIP_CONFIG" ]]; then
+
+        echo "未找到 starship 配置，正在生成..."
+
+        mkdir -p "$HOME/.config"
+
+        starship preset pastel-powerline \
+            -o "$STARSHIP_CONFIG"
+
+
+        echo "✅ 已生成配置:"
+        echo "$STARSHIP_CONFIG"
+
+    else
+
+        echo "✅ 已存在配置:"
+        echo "$STARSHIP_CONFIG"
+
+    fi
+}
+
+
+install_starship
+
+eval "$(starship init zsh)" # starship
 
 
 # =========================================================
@@ -185,8 +377,6 @@ bindkey -M vicmd 'j' history-substring-search-down
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND=''
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND=''
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
-
-eval "$(starship init zsh)" # starship
 
 alias ..="cd .."
 alias c="clear"
