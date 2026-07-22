@@ -132,20 +132,9 @@ if ! command -v eza &>/dev/null; then
 
 fi
 
-if command -v eza &>/dev/null; then
-
-    EZA_VERSION=$(eza --version | head -n 1)
-
-    echo "✅ eza 安装成功"
-    echo "版本: $EZA_VERSION"
-
-else
-
-    echo "❌ eza 安装失败，请手动安装"
-
-fi
-
+##############################################
 # 检查有没有安装 fastfetch
+##############################################
 if ! command -v fastfetch &>/dev/null; then
     echo "fastfetch 未安装，正在安装..."
 
@@ -243,18 +232,6 @@ if ! command -v fzf &>/dev/null; then
     fi
 fi
 
-if command -v fzd &>/dev/null; then
-
-    FZF_VERSION=$(fzf --version | head -n 1)
-
-    echo "✅ fzf 安装成功"
-    echo "版本: $FZF_VERSION"
-
-else
-
-    echo "❌ fzf 安装失败，请手动安装"
-
-fi
 
 # =====================================================
 # Starship 安装与配置
