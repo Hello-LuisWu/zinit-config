@@ -175,25 +175,6 @@ if ! command -v fastfetch &>/dev/null; then
     fi
 fi
 
-
-# =====================================================
-# fastfetch 版本检测
-# =====================================================
-
-if command -v fastfetch &>/dev/null; then
-
-    FF_VERSION=$(fastfetch --version | head -n 1)
-
-    echo "✅ fastfetch 安装成功"
-    echo "版本: $FF_VERSION"
-
-else
-
-    echo "❌ fastfetch 安装失败，请手动安装"
-
-fi
-
-
 # 启动shell 检查有没有安装fzf
 if ! command -v fzf &>/dev/null; then
     echo "fzf 未安装，正在安装..."
@@ -232,7 +213,10 @@ if ! command -v fzf &>/dev/null; then
     fi
 fi
 
+
+# ========================================
 # 检查 starship 是否安装
+# ========================================
 if ! command -v starship &>/dev/null; then
     echo "starship 未安装，正在安装..."
 
