@@ -281,17 +281,12 @@ zinit light zsh-users/zsh-completions
 zinit light Aloxaf/fzf-tab
 zinit light Freed-Wu/fzf-tab-source
 zinit light zsh-users/zsh-autosuggestions
-zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zsh-config/refs/heads/main/.zshconf/config/sudo.zsh
-# zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zsh-config/refs/heads/main/.zshconf/config/vimode.zsh
+# zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zinit-config/refs/heads/main/plugins/sudo.zsh
+zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zsh-config/refs/heads/main/.zshconf/config/vimode.zsh
 zinit light hlissner/zsh-autopair
 zinit light zsh-users/zsh-history-substring-search
 # zinit light sindresorhus/pure
 zinit light zdharma-continuum/fast-syntax-highlighting
-
-# sudo 按键绑定 ------------------------------------------------------
-bindkey -M emacs '^f' sudo-command-line
-bindkey -M vicmd '^f' sudo-command-line
-bindkey -M viins '^f' sudo-command-line
 
 # vi mode 按键绑定 ------------------------------------------------------
 bindkey -M vicmd 'H' vi-first-non-blank
