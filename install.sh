@@ -44,4 +44,4 @@ rm -f "$TMP_FILE"
 
 echo
 echo "执行以下命令加载配置:"
-echo "source ~/.zshrc"
+echo "exec zsh"
