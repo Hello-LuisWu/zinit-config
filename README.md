@@ -132,11 +132,6 @@ if ! command -v eza &>/dev/null; then
 
 fi
 
-
-# =====================================================
-# eza 版本检测
-# =====================================================
-
 if command -v eza &>/dev/null; then
 
     EZA_VERSION=$(eza --version | head -n 1)
@@ -175,7 +170,7 @@ if ! command -v fastfetch &>/dev/null; then
             arch|manjaro)
                 sudo pacman -Sy fastfetch
                 ;;
-            fedora)
+            fedora|rocky|rhel|centos)
                 sudo dnf install -y fastfetch
                 ;;
             *)
@@ -198,10 +193,10 @@ fi
 
 if command -v fastfetch &>/dev/null; then
 
-    EZA_VERSION=$(fastfetch --version | head -n 1)
+    FF_VERSION=$(fastfetch --version | head -n 1)
 
     echo "✅ fastfetch 安装成功"
-    echo "版本: $EZA_VERSION"
+    echo "版本: $FF_VERSION"
 
 else
 
