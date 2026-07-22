@@ -281,8 +281,8 @@ zinit light zsh-users/zsh-completions
 zinit light Aloxaf/fzf-tab
 zinit light Freed-Wu/fzf-tab-source
 zinit light zsh-users/zsh-autosuggestions
-zinit snippet OMZP::sudo
-zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zsh-config/refs/heads/main/.zshconf/config/vimode.zsh
+zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zsh-config/refs/heads/main/.zshconf/config/sudo.zsh
+# zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zsh-config/refs/heads/main/.zshconf/config/vimode.zsh
 zinit light hlissner/zsh-autopair
 zinit light zsh-users/zsh-history-substring-search
 # zinit light sindresorhus/pure
