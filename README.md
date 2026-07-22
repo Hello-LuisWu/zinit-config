@@ -273,10 +273,6 @@ if [[ ! -f ~/.config/starship.toml ]]; then
     starship preset pastel-powerline -o ~/.config/starship.toml
 fi
 
-
-eval "$(starship init zsh)"
-
-
 # =========================================================
 # History
 # =========================================================
@@ -367,6 +363,8 @@ alias gmail="git config --global user.email 1014150883@qq.com"
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+eval "$(starship init zsh)"
 ```
 
 用 `exec zsh` 命令重启 zsh
