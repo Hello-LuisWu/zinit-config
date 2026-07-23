@@ -157,6 +157,48 @@ if ! command -v fzf &>/dev/null; then
     fi
 fi
 
+
+# =================================================
+# 检查有没有安装 yazi
+# =================================================
+if ! command -v yazi &>/dev/null; then
+    echo "yazi 未安装，正在安装..."
+
+    # 判断操作系统
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS 安装 yazi
+        if command -v brew &>/dev/null; then
+            brew update
+            brew install yazi ffmpeg-full sevenzip jq poppler zoxide resvg imagemagick-full font-symbols-only-nerd-font
+            brew link ffmpeg-full imagemagick-full -f --overwrite
+        else
+            echo "未检测到 Homebrew，请先安装 Homebrew: https://brew.sh/"
+            exit 1
+        fi
+    elif [[ -f /etc/os-release ]]; then
+        # 读取 Linux 发行版信息
+        . /etc/os-release
+        case "$ID" in
+            ubuntu|debian)
+                sudo snap install yazi --classic
+                ;;
+            arch|manjaro)
+                sudo pacman -S yazi ffmpeg 7zip jq poppler zoxide resvg imagemagick
+                ;;
+            fedora|rocky|rhel|centos)
+                sudo dnf copr enable lihaohong/yazi
+                sudo dnf install -y yazi
+                ;;
+            *)
+                echo "未知 Linux 发行版 ($ID)，请使用 Git 安装 yazi..."
+                ;;
+        esac
+    else
+        echo "无法检测操作系统类型，请手动安装 yazi: https://yazi-rs.github.io/docs/installation"
+        exit 1
+    fi
+fi
+
 # =================================================
 # 检查有没有安装 lazygit
 # =================================================
@@ -347,7 +389,7 @@ zinit light zsh-users/zsh-completions
 zinit light Aloxaf/fzf-tab
 zinit light Freed-Wu/fzf-tab-source
 zinit light zsh-users/zsh-autosuggestions
-# zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zinit-config/refs/heads/main/plugins/sudo.zsh
+zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zinit-config/refs/heads/main/plugins/sudo.zsh
 zinit snippet https://raw.githubusercontent.com/Hello-LuisWu/zsh-config/refs/heads/main/.zshconf/config/vimode.zsh
 zinit light hlissner/zsh-autopair
 zinit light zsh-users/zsh-history-substring-search
