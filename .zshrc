@@ -51,7 +51,6 @@ if ! command -v eza &>/dev/null; then
                 ;;
             arch|manjaro)
                 echo "正在安装 Arch eza..."
-                sudo pacman -Syu --noconfirm
                 sudo pacman -S --noconfirm eza
                 ;;
             fedora|rocky|rhel|centos)
@@ -183,6 +182,7 @@ if ! command -v yazi &>/dev/null; then
                 sudo snap install yazi --classic
                 ;;
             arch|manjaro)
+                sudo pacman -Syu --noconfirm
                 sudo pacman -S --noconfirm yazi ffmpeg 7zip jq poppler zoxide resvg imagemagick
                 ;;
             fedora|rocky|rhel|centos)
