@@ -80,7 +80,6 @@ fi
 # ============================================
 if ! command -v fastfetch &>/dev/null; then
     echo "fastfetch 未安装，正在安装..."
-
     # 判断操作系统
     if [[ "$OSTYPE" == "darwin"* ]]; then
         # macOS 安装 fastfetch
@@ -279,49 +278,6 @@ if ! command -v rg &>/dev/null; then
         exit 1
     fi
 fi
-
-
-# =================================================
-# 检查有没有安装 fd
-# =================================================
-if ! command -v fd &>/dev/null; then
-    echo "fd 未安装，正在安装..."
-
-    # 判断操作系统
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS 安装 fd
-        if command -v brew &>/dev/null; then
-            brew install fd
-        else
-            echo "未检测到 Homebrew，请先安装 Homebrew: https://brew.sh/"
-            exit 1
-        fi
-    elif [[ -f /etc/os-release ]]; then
-        # 读取 Linux 发行版信息
-        . /etc/os-release
-        case "$ID" in
-            ubuntu|debian)
-                sudo apt-get install fd-find
-                ;;
-            arch|manjaro)
-                sudo pacman -S --noconfirm fd
-                ;;
-            fedora|rocky|rhel|centos)
-                sudo dnf copr enable tkbcopr/fd
-                sudo dnf install -y fd
-                ;;
-            *)
-                echo "未知 Linux 发行版 ($ID)，请使用 Git 方式安装 fd..."
-                ;;
-        esac
-    else
-        echo "无法检测操作系统类型，请手动安装 fd: https://github.com/sharkdp/fd"
-        exit 1
-    fi
-fi
-
-
-
 
 # ========================================
 # 检查 starship 是否安装
