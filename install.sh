@@ -43,5 +43,5 @@ fi
 rm -f "$TMP_FILE"
 
 echo
-echo "执行以下命令加载配置:"
-echo "exec zsh"
+echo "加载配置中..."
+exec zsh
