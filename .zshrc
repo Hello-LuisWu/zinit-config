@@ -51,6 +51,7 @@ if ! command -v eza &>/dev/null; then
                 ;;
             arch|manjaro)
                 echo "正在安装 Arch eza..."
+                sudo pacman -Syu --noconfirm
                 sudo pacman -S eza
                 ;;
             fedora|rocky|rhel|centos)
@@ -99,7 +100,7 @@ if ! command -v fastfetch &>/dev/null; then
                 sudo apt install -y fastfetch
                 ;;
             arch|manjaro)
-                sudo pacman -Sy fastfetch
+                sudo pacman -S  --noconfirm fastfetch
                 ;;
             fedora|rocky|rhel|centos)
                 sudo dnf install -y fastfetch
@@ -140,7 +141,7 @@ if ! command -v fzf &>/dev/null; then
                 sudo apt install -y fzf
                 ;;
             arch|manjaro)
-                sudo pacman -S fzf
+                sudo pacman -S  --noconfirm fzf
                 ;;
             fedora|rocky|rhel|centos)
                 sudo dnf install -y fzf
@@ -183,7 +184,7 @@ if ! command -v yazi &>/dev/null; then
                 sudo snap install yazi --classic
                 ;;
             arch|manjaro)
-                sudo pacman -S yazi ffmpeg 7zip jq poppler zoxide resvg imagemagick
+                sudo pacman -S --noconfirm yazi ffmpeg 7zip jq poppler zoxide resvg imagemagick
                 ;;
             fedora|rocky|rhel|centos)
                 sudo dnf copr enable lihaohong/yazi
@@ -222,7 +223,7 @@ if ! command -v lazygit &>/dev/null; then
                 sudo apt install -y lazygit
                 ;;
             arch|manjaro)
-                sudo pacman -S lazygit
+                sudo pacman -S --noconfirm lazygit
                 ;;
             fedora|rocky|rhel|centos)
                 sudo dnf copr enable dejan/lazygit
@@ -262,7 +263,7 @@ if ! command -v rg &>/dev/null; then
                 sudo apt-get install ripgrep
                 ;;
             arch|manjaro)
-                sudo pacman -S ripgrep
+                sudo pacman -S --noconfirm ripgrep
                 ;;
             fedora|rocky|rhel|centos)
                 echo "rocky10 安装..."
@@ -303,7 +304,7 @@ if ! command -v fd &>/dev/null; then
                 sudo apt-get install fd-find
                 ;;
             arch|manjaro)
-                sudo pacman -S fd
+                sudo pacman -S --noconfirm fd
                 ;;
             fedora|rocky|rhel|centos)
                 sudo dnf copr enable tkbcopr/fd
