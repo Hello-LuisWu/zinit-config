@@ -52,7 +52,7 @@ if ! command -v eza &>/dev/null; then
             arch|manjaro)
                 echo "正在安装 Arch eza..."
                 sudo pacman -Syu --noconfirm
-                sudo pacman -S eza
+                sudo pacman -S --noconfirm eza
                 ;;
             fedora|rocky|rhel|centos)
                 echo "正在安装 RHEL 系 eza..."
