@@ -18,12 +18,9 @@ autoload -Uz _zinit
 # =====================================================
 
 if ! command -v eza &>/dev/null; then
-
     echo "eza 未安装，正在安装..."
-
     # 判断操作系统
     if [[ "$OSTYPE" == "darwin"* ]]; then
-
         # macOS
         if command -v brew &>/dev/null; then
             brew install eza
@@ -31,97 +28,55 @@ if ! command -v eza &>/dev/null; then
             echo "未检测到 Homebrew，请先安装 Homebrew"
             exit 1
         fi
-
-
     elif [[ -f /etc/os-release ]]; then
-
         # Linux
         . /etc/os-release
-
         case "$ID" in
-
             ubuntu|debian)
-
                 echo "正在安装 Debian/Ubuntu eza..."
-
                 sudo apt update
                 sudo apt install -y gpg wget
-
                 sudo mkdir -p /etc/apt/keyrings
-
                 wget -qO- \
                 https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
                 | sudo gpg --dearmor \
                 -o /etc/apt/keyrings/gierens.gpg
-
-
                 echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
                 | sudo tee /etc/apt/sources.list.d/gierens.list >/dev/null
-
-
                 sudo chmod 644 \
                 /etc/apt/keyrings/gierens.gpg \
                 /etc/apt/sources.list.d/gierens.list
-
-
                 sudo apt update
                 sudo apt install -y eza
-
                 ;;
-
-
             arch|manjaro)
-
                 echo "正在安装 Arch eza..."
-
-                sudo pacman -Sy --noconfirm eza
-
+                sudo pacman -S eza
                 ;;
-
-
             fedora|rocky|rhel|centos)
-
                 echo "正在安装 RHEL 系 eza..."
-
                 if ! sudo dnf install -y eza; then
-        
                     echo "使用 cargo 安装 eza"
-        
                     sudo dnf install -y cargo
-        
                     cargo install eza
-        
                     export PATH="$HOME/.cargo/bin:$PATH"
-        
                 fi
-
-
                 ;;
-
             *)
-
                 echo "未知 Linux 发行版: $ID"
                 echo "请手动安装 eza: https://github.com/eza-community/eza/blob/main/INSTALL.md"
                 exit 1
-
                 ;;
-
         esac
-
-
     else
-
         echo "无法检测系统类型，请手动安装 eza"
         exit 1
-
     fi
-
-
 fi
 
-##############################################
+# ============================================
 # 检查有没有安装 fastfetch
-##############################################
+# ============================================
 if ! command -v fastfetch &>/dev/null; then
     echo "fastfetch 未安装，正在安装..."
 
@@ -139,8 +94,8 @@ if ! command -v fastfetch &>/dev/null; then
         . /etc/os-release
         case "$ID" in
             ubuntu|debian)
-                sudo add-apt-repository ppa:zhangsongcui3371/fastfetch
-                sudo apt update
+#                sudo add-apt-repository ppa:zhangsongcui3371/fastfetch
+#                sudo apt update
                 sudo apt install -y fastfetch
                 ;;
             arch|manjaro)
@@ -162,7 +117,9 @@ if ! command -v fastfetch &>/dev/null; then
     fi
 fi
 
-# 启动shell 检查有没有安装fzf
+# =================================================
+# 检查有没有安装fzf
+# =================================================
 if ! command -v fzf &>/dev/null; then
     echo "fzf 未安装，正在安装..."
 
@@ -180,10 +137,10 @@ if ! command -v fzf &>/dev/null; then
         . /etc/os-release
         case "$ID" in
             ubuntu|debian)
-                sudo apt update && sudo apt install -y fzf
+                sudo apt install -y fzf
                 ;;
             arch|manjaro)
-                sudo pacman -Sy --noconfirm fzf
+                sudo pacman -S fzf
                 ;;
             fedora|rocky|rhel|centos)
                 sudo dnf install -y fzf
@@ -199,6 +156,128 @@ if ! command -v fzf &>/dev/null; then
         exit 1
     fi
 fi
+
+# =================================================
+# 检查有没有安装 lazygit
+# =================================================
+if ! command -v lazygit &>/dev/null; then
+    echo "lazygit 未安装，正在安装..."
+
+    # 判断操作系统
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS 安装 lazygit
+        if command -v brew &>/dev/null; then
+            brew install lazygit
+        else
+            echo "未检测到 Homebrew，请先安装 Homebrew: https://brew.sh/"
+            exit 1
+        fi
+    elif [[ -f /etc/os-release ]]; then
+        # 读取 Linux 发行版信息
+        . /etc/os-release
+        case "$ID" in
+            ubuntu|debian)
+                sudo apt install -y lazygit
+                ;;
+            arch|manjaro)
+                sudo pacman -S lazygit
+                ;;
+            fedora|rocky|rhel|centos)
+                sudo dnf copr enable dejan/lazygit
+                sudo dnf install -y lazygit
+                ;;
+            *)
+                echo "未知 Linux 发行版 ($ID)，请使用 Git 方式安装 lazygit..."
+                ;;
+        esac
+    else
+        echo "无法检测操作系统类型，请手动安装 lazygit: https://github.com/jesseduffield/lazygit"
+        exit 1
+    fi
+fi
+
+
+# =================================================
+# 检查有没有安装 ripgrep
+# =================================================
+if ! command -v rg &>/dev/null; then
+    echo "ripgrep 未安装，正在安装..."
+
+    # 判断操作系统
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS 安装 ripgrep
+        if command -v brew &>/dev/null; then
+            brew install ripgrep
+        else
+            echo "未检测到 Homebrew，请先安装 Homebrew: https://brew.sh/"
+            exit 1
+        fi
+    elif [[ -f /etc/os-release ]]; then
+        # 读取 Linux 发行版信息
+        . /etc/os-release
+        case "$ID" in
+            ubuntu|debian)
+                sudo apt-get install ripgrep
+                ;;
+            arch|manjaro)
+                sudo pacman -S ripgrep
+                ;;
+            fedora|rocky|rhel|centos)
+                echo "rocky10 安装..."
+                sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
+                sudo dnf install ripgrep
+                ;;
+            *)
+                echo "未知 Linux 发行版 ($ID)，请使用 Git 方式安装 ripgrep..."
+                ;;
+        esac
+    else
+        echo "无法检测操作系统类型，请手动安装 ripgrep: https://github.com/BurntSushi/ripgrep"
+        exit 1
+    fi
+fi
+
+
+# =================================================
+# 检查有没有安装 fd
+# =================================================
+if ! command -v fd &>/dev/null; then
+    echo "fd 未安装，正在安装..."
+
+    # 判断操作系统
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS 安装 fd
+        if command -v brew &>/dev/null; then
+            brew install fd
+        else
+            echo "未检测到 Homebrew，请先安装 Homebrew: https://brew.sh/"
+            exit 1
+        fi
+    elif [[ -f /etc/os-release ]]; then
+        # 读取 Linux 发行版信息
+        . /etc/os-release
+        case "$ID" in
+            ubuntu|debian)
+                sudo apt-get install fd-find
+                ;;
+            arch|manjaro)
+                sudo pacman -S fd
+                ;;
+            fedora|rocky|rhel|centos)
+                sudo dnf copr enable tkbcopr/fd
+                sudo dnf install -y fd
+                ;;
+            *)
+                echo "未知 Linux 发行版 ($ID)，请使用 Git 方式安装 fd..."
+                ;;
+        esac
+    else
+        echo "无法检测操作系统类型，请手动安装 fd: https://github.com/sharkdp/fd"
+        exit 1
+    fi
+fi
+
+
 
 
 # ========================================
