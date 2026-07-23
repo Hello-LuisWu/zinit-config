@@ -181,7 +181,9 @@ if ! command -v yazi &>/dev/null; then
         . /etc/os-release
         case "$ID" in
             ubuntu|debian)
-                sudo snap install yazi --classic
+                curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+                echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> $HOME/.zshrc
+                cargo binstall yazi-fm
                 ;;
             arch|manjaro)
                 sudo pacman -S --noconfirm yazi ffmpeg 7zip jq poppler zoxide resvg imagemagick
