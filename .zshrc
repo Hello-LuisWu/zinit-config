@@ -181,9 +181,7 @@ if ! command -v yazi &>/dev/null; then
         . /etc/os-release
         case "$ID" in
             ubuntu|debian)
-                curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-                echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> $HOME/.zshrc
-                cargo binstall yazi-fm
+                sudo snap install yazi --classic
                 ;;
             arch|manjaro)
                 sudo pacman -S --noconfirm yazi ffmpeg 7zip jq poppler zoxide resvg imagemagick
@@ -444,7 +442,6 @@ alias gg="lazygit"
 alias f="yazi"
 alias ff="fzf"
 alias fg="rg"
-alias fd="fd"
 alias n="nvim"
 alias v="vim"
 alias zz="nvim ~/.zshrc"
